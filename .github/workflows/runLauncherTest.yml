@@ -1,4 +1,4 @@
-name: Run launcher UI Tests
+name: Run example UI Tests
 on:
   workflow_dispatch
 jobs:
