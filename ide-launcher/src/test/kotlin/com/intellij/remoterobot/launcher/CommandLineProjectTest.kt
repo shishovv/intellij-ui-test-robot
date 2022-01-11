@@ -4,6 +4,7 @@ import com.intellij.remoterobot.RemoteRobot
 import com.intellij.remoterobot.fixtures.CommonContainerFixture
 import com.intellij.remoterobot.fixtures.ComponentFixture
 import com.intellij.remoterobot.search.locators.byXpath
+import com.intellij.remoterobot.stepsProcessing.StepLogger
 import com.intellij.remoterobot.utils.Locators
 import com.intellij.remoterobot.utils.hasSingleComponent
 import com.intellij.remoterobot.utils.waitFor
@@ -18,6 +19,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.imageio.ImageIO
 import javax.swing.Box
 import javax.swing.JDialog
@@ -50,18 +52,20 @@ class CommandLineProjectTest {
         @AfterAll
         @JvmStatic
         fun cleanUp() {
-            ideaProcess?.destroy()
+//            ideaProcess?.destroy(30, TimeUnit.SECONDS)
             tmpDir.toFile().deleteRecursively()
         }
     }
 
     @Test
     fun commandLineProjectTest() {
+        println("Click on 'Create New Project'")
         remoteRobot.find<CommonContainerFixture>(
             Locators.byProperties(Locators.XpathProperty.SIMPLE_CLASS_NAME to "FlatWelcomeFrame"),
             Duration.ofSeconds(20)
         ).button(byXpath("""//div[contains(@defaulticon, 'createNewProject') or (@accessiblename='New Project' and @class='JBOptionButton')]"""))
             .click()
+        println("Setup project")
         remoteRobot.find<CommonContainerFixture>(Locators.byTypeAndProperties(JDialog::class.java, Locators.XpathProperty.ACCESSIBLE_NAME to "New Project"), Duration.ofSeconds(10)).run {
             jList().clickItem("Java")
             button("Next").click()
@@ -71,12 +75,15 @@ class CommandLineProjectTest {
             button("Finish").click()
         }
         remoteRobot.find<CommonContainerFixture>(Locators.byProperties(Locators.XpathProperty.SIMPLE_CLASS_NAME to "IdeFrameImpl"), Duration.ofSeconds(20)).run {
+            println("Close Tip of the Day")
             find<CommonContainerFixture>(Locators.byProperties(Locators.XpathProperty.ACCESSIBLE_NAME to "Tip of the Day"), Duration.ofSeconds(20))
                 .button("Close").click()
             runCatching { button("Got It").click() }
+            println("Run 'Main'")
             find<CommonContainerFixture>(Locators.byType(Box::class.java))
                 .find<ComponentFixture>(Locators.byProperties(Locators.XpathProperty.TOOLTIP to "Run 'Main'"))
                 .click()
+            println("Check output")
             waitFor(Duration.ofSeconds(30)) {
                 hasSingleComponent(Locators.byPropertiesContains(Locators.XpathProperty.TEXT to "Process finished with exit code 0"))
             }
