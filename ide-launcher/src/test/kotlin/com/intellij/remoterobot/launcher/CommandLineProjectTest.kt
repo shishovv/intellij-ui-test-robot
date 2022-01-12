@@ -37,6 +37,7 @@ class CommandLineProjectTest {
             val client = OkHttpClient()
             remoteRobot = RemoteRobot("http://localhost:8082", client)
             val ideDownloader = IdeDownloader(client)
+            println("Start ide")
             ideaProcess = IdeLauncher.launchIde(
                 ideDownloader.downloadAndExtractLatestEap(Ide.IDEA_COMMUNITY, tmpDir),
                 mapOf("robot-server.port" to 8082),
@@ -44,6 +45,7 @@ class CommandLineProjectTest {
                 listOf(ideDownloader.downloadRobotPlugin(tmpDir)),
                 tmpDir
             )
+            println("Wait for ide started")
             waitFor(Duration.ofSeconds(90), Duration.ofSeconds(5)) {
                 remoteRobot.isAvailable()
             }
