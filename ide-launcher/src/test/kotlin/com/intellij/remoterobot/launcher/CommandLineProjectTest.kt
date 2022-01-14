@@ -34,13 +34,8 @@ class CommandLineProjectTest {
 
         @BeforeAll
         @JvmStatic
-        fun init() {
-            StepWorker.registerProcessor(StepLogger())
-        }
-
-        @BeforeAll
-        @JvmStatic
         fun startIdea() {
+            StepWorker.registerProcessor(StepLogger())
             val client = OkHttpClient()
             remoteRobot = RemoteRobot("http://localhost:8082", client)
             val ideDownloader = IdeDownloader(client)
@@ -63,7 +58,7 @@ class CommandLineProjectTest {
         @AfterAll
         @JvmStatic
         fun cleanUp() {
-//            ideaProcess?.destroy(30, TimeUnit.SECONDS)
+            ideaProcess?.destroy()
             tmpDir.toFile().deleteRecursively()
         }
     }
