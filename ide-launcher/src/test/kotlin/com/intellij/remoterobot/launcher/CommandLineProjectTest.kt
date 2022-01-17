@@ -91,7 +91,7 @@ class CommandLineProjectTest {
         remoteRobot.find<CommonContainerFixture>(Locators.byProperties(Locators.XpathProperty.SIMPLE_CLASS_NAME to "IdeFrameImpl"), Duration.ofSeconds(20)).run {
             step("Close Tip of the Day") {
                 find<CommonContainerFixture>(
-                    Locators.byProperties(Locators.XpathProperty.ACCESSIBLE_NAME to "Tip of the Day"),
+                    Locators.byTypeAndProperties(JDialog::class.java, Locators.XpathProperty.ACCESSIBLE_NAME to "Tip of the Day"),
                     Duration.ofSeconds(20)
                 )
                     .button("Close").click()
