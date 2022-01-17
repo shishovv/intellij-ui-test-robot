@@ -3,7 +3,7 @@ on:
   workflow_dispatch
 jobs:
   build-for-ui-test-linux-launcher:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Java
@@ -13,7 +13,10 @@ jobs:
           java-version: 11
       - name: Tests
         run: |
-          ./gradlew :ide-launcher:test
+          export DISPLAY=:99.0
+          Xvfb -ac :99 -screen 0 1920x1080x24 &
+          sleep 10
+          gradle :ide-launcher:test
       - name: Save fails report
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2

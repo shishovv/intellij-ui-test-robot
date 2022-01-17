@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.TestWatcher
@@ -21,6 +22,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.imageio.ImageIO
 import javax.swing.Box
 import javax.swing.JDialog
@@ -64,6 +66,7 @@ class CommandLineProjectTest {
     }
 
     @Test
+    @Timeout(value = 10, unit = TimeUnit.MINUTES)
     fun commandLineProjectTest() {
         step("Click on 'Create New Project'") {
             remoteRobot.find<CommonContainerFixture>(
