@@ -103,7 +103,7 @@ class CommandLineProjectTest {
                     .click()
             }
             step("Check output") {
-                waitFor(Duration.ofSeconds(30)) {
+                waitFor(Duration.ofSeconds(60)) {
                     hasSingleComponent(Locators.byPropertiesContains(Locators.XpathProperty.TEXT to "Process finished with exit code 0"))
                 }
             }
