@@ -28,6 +28,7 @@ import javax.swing.Box
 import javax.swing.JDialog
 
 @ExtendWith(CommandLineProjectTest.IdeTestWatcher::class)
+@Timeout(value = 25, unit = TimeUnit.MINUTES)
 class CommandLineProjectTest {
     companion object {
         private var ideaProcess: Process? = null
@@ -66,7 +67,6 @@ class CommandLineProjectTest {
     }
 
     @Test
-    @Timeout(value = 10, unit = TimeUnit.MINUTES)
     fun commandLineProjectTest() {
         step("Click on 'Create New Project'") {
             remoteRobot.find<CommonContainerFixture>(
